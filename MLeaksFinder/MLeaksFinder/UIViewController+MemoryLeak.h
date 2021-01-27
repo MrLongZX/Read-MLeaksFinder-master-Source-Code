@@ -17,6 +17,8 @@
 
 @interface UIViewController (MemoryLeak)
 
+- (UIViewController *)syl_visibleViewControllerIfExist;
+
 @end
 
 #endif

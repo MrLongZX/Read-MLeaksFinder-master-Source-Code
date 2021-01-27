@@ -23,13 +23,16 @@ extern const void *const kLatestSenderKey;
 + (void)load {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
+        // 方法交换
         [self swizzleSEL:@selector(sendAction:to:from:forEvent:) withSEL:@selector(swizzled_sendAction:to:from:forEvent:)];
     });
 }
 
 - (BOOL)swizzled_sendAction:(SEL)action to:(id)target from:(id)sender forEvent:(UIEvent *)event {
+    // 关联对象保存操作发送者
     objc_setAssociatedObject(self, kLatestSenderKey, @((uintptr_t)sender), OBJC_ASSOCIATION_RETAIN);
     
+    // 调用原方法
     return [self swizzled_sendAction:action to:target from:sender forEvent:event];
 }
 

@@ -14,7 +14,10 @@
 
 @interface MLeakedObjectProxy : NSObject
 
+// 是否存在某对象内存泄露
 + (BOOL)isAnyObjectLeakedAtPtrs:(NSSet *)ptrs;
+
+// 添加泄露对象
 + (void)addLeakedObject:(id)object;
 
 @end

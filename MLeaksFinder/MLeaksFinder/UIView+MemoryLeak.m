@@ -18,10 +18,12 @@
 @implementation UIView (MemoryLeak)
 
 - (BOOL)willDealloc {
+    // 沿继承者链调用将要释放方法
     if (![super willDealloc]) {
         return NO;
     }
     
+    // 将要释放所有子视图
     [self willReleaseChildren:self.subviews];
     
     return YES;

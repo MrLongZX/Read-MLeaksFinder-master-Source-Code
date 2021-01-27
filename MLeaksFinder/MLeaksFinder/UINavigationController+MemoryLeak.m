@@ -23,6 +23,7 @@ static const void *const kPoppedDetailVCKey = &kPoppedDetailVCKey;
 + (void)load {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
+        // 对象方法交换
         [self swizzleSEL:@selector(pushViewController:animated:) withSEL:@selector(swizzled_pushViewController:animated:)];
         [self swizzleSEL:@selector(popViewControllerAnimated:) withSEL:@selector(swizzled_popViewControllerAnimated:)];
         [self swizzleSEL:@selector(popToViewController:animated:) withSEL:@selector(swizzled_popToViewController:animated:)];
@@ -31,6 +32,7 @@ static const void *const kPoppedDetailVCKey = &kPoppedDetailVCKey;
 }
 
 - (void)swizzled_pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    // 如果存在splitViewController拆分视图（iPad中）
     if (self.splitViewController) {
         id detailViewController = objc_getAssociatedObject(self, kPoppedDetailVCKey);
         if ([detailViewController isKindOfClass:[UIViewController class]]) {
@@ -43,9 +45,11 @@ static const void *const kPoppedDetailVCKey = &kPoppedDetailVCKey;
 }
 
 - (UIViewController *)swizzled_popViewControllerAnimated:(BOOL)animated {
+    // 获取pop的视图控制器
     UIViewController *poppedViewController = [self swizzled_popViewControllerAnimated:animated];
     
     if (!poppedViewController) {
+        // 如果已经释放
         return nil;
     }
     
@@ -58,37 +62,46 @@ static const void *const kPoppedDetailVCKey = &kPoppedDetailVCKey;
     }
     
     // VC is not dealloced until disappear when popped using a left-edge swipe gesture
+    // 在使用左滑返回时，直到disappear，VC没有释放，
     extern const void *const kHasBeenPoppedKey;
+    // 给未释放poppedViewController关联kHasBeenPoppedKey为YES
+    // kHasBeenPoppedKey标记poppedViewController已经出视图控制器栈
     objc_setAssociatedObject(poppedViewController, kHasBeenPoppedKey, @(YES), OBJC_ASSOCIATION_RETAIN);
     
     return poppedViewController;
 }
 
 - (NSArray<UIViewController *> *)swizzled_popToViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    // pop的视图集合
     NSArray<UIViewController *> *poppedViewControllers = [self swizzled_popToViewController:viewController animated:animated];
     
     for (UIViewController *viewController in poppedViewControllers) {
+        // 调用VC的将要释放方法
         [viewController willDealloc];
     }
-    
+    // 返回pop的视图集合
     return poppedViewControllers;
 }
 
 - (NSArray<UIViewController *> *)swizzled_popToRootViewControllerAnimated:(BOOL)animated {
+    // pop的视图集合
     NSArray<UIViewController *> *poppedViewControllers = [self swizzled_popToRootViewControllerAnimated:animated];
     
     for (UIViewController *viewController in poppedViewControllers) {
+        // 调用VC的将要释放方法
         [viewController willDealloc];
     }
-    
+    // 返回pop的视图集合
     return poppedViewControllers;
 }
 
 - (BOOL)willDealloc {
+    // 沿继承者链调用将要释放方法
     if (![super willDealloc]) {
         return NO;
     }
     
+    // 将要释放包含的视图栈中的视图
     [self willReleaseChildren:self.viewControllers];
     
     return YES;

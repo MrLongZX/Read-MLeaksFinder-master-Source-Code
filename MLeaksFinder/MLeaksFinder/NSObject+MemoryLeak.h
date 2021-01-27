@@ -16,16 +16,22 @@
 
 @interface NSObject (MemoryLeak)
 
+// 将要释放
 - (BOOL)willDealloc;
 - (void)willReleaseObject:(id)object relationship:(NSString *)relationship;
 
+// 将要释放某个子孩子
 - (void)willReleaseChild:(id)child;
+// 将要释放多个子孩子
 - (void)willReleaseChildren:(NSArray *)children;
 
+// 获取视图栈
 - (NSArray *)viewStack;
 
+// 添加类名到白名单
 + (void)addClassNamesToWhitelist:(NSArray *)classNames;
 
+// 对象方法交换
 + (void)swizzleSEL:(SEL)originalSEL withSEL:(SEL)swizzledSEL;
 
 @end

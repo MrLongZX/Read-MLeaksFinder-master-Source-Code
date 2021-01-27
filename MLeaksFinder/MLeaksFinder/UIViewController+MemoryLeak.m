@@ -23,6 +23,7 @@ const void *const kHasBeenPoppedKey = &kHasBeenPoppedKey;
 + (void)load {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
+        // 对象方法交换
         [self swizzleSEL:@selector(viewDidDisappear:) withSEL:@selector(swizzled_viewDidDisappear:)];
         [self swizzleSEL:@selector(viewWillAppear:) withSEL:@selector(swizzled_viewWillAppear:)];
         [self swizzleSEL:@selector(dismissViewControllerAnimated:completion:) withSEL:@selector(swizzled_dismissViewControllerAnimated:completion:)];
@@ -30,20 +31,26 @@ const void *const kHasBeenPoppedKey = &kHasBeenPoppedKey;
 }
 
 - (void)swizzled_viewDidDisappear:(BOOL)animated {
+    // 调用原方法
     [self swizzled_viewDidDisappear:animated];
     
+    // VC关联kHasBeenPoppedKey的值为YES
     if ([objc_getAssociatedObject(self, kHasBeenPoppedKey) boolValue]) {
+        // 调用将要释放对象
         [self willDealloc];
     }
 }
 
 - (void)swizzled_viewWillAppear:(BOOL)animated {
+    // 调用原方法
     [self swizzled_viewWillAppear:animated];
     
+    // 给VC关联kHasBeenPoppedKey，值为NO
     objc_setAssociatedObject(self, kHasBeenPoppedKey, @(NO), OBJC_ASSOCIATION_RETAIN);
 }
 
 - (void)swizzled_dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion {
+    // 调用原方法
     [self swizzled_dismissViewControllerAnimated:flag completion:completion];
     
     UIViewController *dismissedViewController = self.presentedViewController;
@@ -53,22 +60,53 @@ const void *const kHasBeenPoppedKey = &kHasBeenPoppedKey;
     
     if (!dismissedViewController) return;
     
+    // dismissVC执行将要释放方法
     [dismissedViewController willDealloc];
 }
 
 - (BOOL)willDealloc {
+    // 沿继承者链调用将要释放方法
     if (![super willDealloc]) {
         return NO;
     }
     
+    // 将要释放多个子孩子
     [self willReleaseChildren:self.childViewControllers];
+    // 将要释放某个子孩子
     [self willReleaseChild:self.presentedViewController];
     
     if (self.isViewLoaded) {
+        // view已经加载到内存，将要释放view
         [self willReleaseChild:self.view];
     }
     
     return YES;
+}
+
+- (UIViewController *)syl_visibleViewControllerIfExist {
+    
+    if (self.presentedViewController) {
+        return [self.presentedViewController syl_visibleViewControllerIfExist];
+    }
+    
+    if ([self isKindOfClass:[UINavigationController class]]) {
+        return [((UINavigationController *)self).visibleViewController syl_visibleViewControllerIfExist];
+    }
+    
+    if ([self isKindOfClass:[UITabBarController class]]) {
+        return [((UITabBarController *)self).selectedViewController syl_visibleViewControllerIfExist];
+    }
+    
+    if ([self syl_isViewLoadedAndVisible]) {
+        return self;
+    } else {
+        NSLog(@"UIViewController visibleViewControllerIfExist:，找不到可见的viewController。self = %@, self.view = %@, self.view.window = %@", self, [self isViewLoaded] ? self.view : nil, [self isViewLoaded] ? self.view.window : nil);
+        return nil;
+    }
+}
+
+- (BOOL)syl_isViewLoadedAndVisible {
+    return self.isViewLoaded;
 }
 
 @end
