@@ -7,12 +7,11 @@
 //
 
 #import "TestViewController.h"
-
-typedef void(^MyBlock)(void);
+#import "TestView.h"
 
 @interface TestViewController ()
 
-@property (nonatomic, copy) MyBlock block;
+@property (nonatomic, strong) TestView *testView;
 
 @end
 
@@ -20,18 +19,16 @@ typedef void(^MyBlock)(void);
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    self.title = @"点击橙色view，制造循环引用";
     self.view.backgroundColor = [UIColor lightGrayColor];
     
+    self.testView = [[TestView alloc] init];
+    self.testView.frame = CGRectMake(100, 100, 100, 100);
+    [self.view addSubview:self.testView];
 }
 
--(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    
-    self.block = ^{
-        NSLog(@"%p",self);
-    };
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
+- (void)dealloc {
+    NSLog(@"%s", __func__);
 }
 
 @end

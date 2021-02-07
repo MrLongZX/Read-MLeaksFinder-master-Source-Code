@@ -22,8 +22,7 @@
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     TestViewController *test = [[TestViewController alloc] init];
-    [self presentViewController:test animated:YES completion:nil];
+    [self.navigationController pushViewController:test animated:YES];
 }
-
 
 @end

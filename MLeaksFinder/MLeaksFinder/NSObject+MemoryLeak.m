@@ -37,6 +37,7 @@ const void *const kLatestSenderKey = &kLatestSenderKey;
     // 关联对象保存的响应发送者
     NSNumber *senderPtr = objc_getAssociatedObject([UIApplication sharedApplication], kLatestSenderKey);
     // 执行target-action的时候，目标对象不检测内存泄漏
+    // self转为无符号长整形
     if ([senderPtr isEqualToNumber:@((uintptr_t)self)])
         // 自身是响应发送者，返回NO
         return NO;
@@ -95,11 +96,11 @@ const void *const kLatestSenderKey = &kLatestSenderKey;
     for (id child in children) {
         // 类名
         NSString *className = NSStringFromClass([child class]);
-        // 添加子视图类名，重新保存视图栈数组
+        // 给孩子对象 通过关联对象 保存从父视图到自身的视图栈
         [child setViewStack:[viewStack arrayByAddingObject:className]];
-        // 添加子视图指针，重新保存父类指针集合
+        // 给孩子对象 通过关联对象 保存从父视图到自身的指针集合
         [child setParentPtrs:[parentPtrs setByAddingObject:@((uintptr_t)child)]];
-        // 孩子对象调用将要释放
+        // 孩子对象调用将要释放方法
         [child willDealloc];
     }
 }

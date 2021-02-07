@@ -25,6 +25,7 @@
 		A39F561525CFB65F003B17E6 /* UIViewController+MemoryLeak.m in Sources */ = {isa = PBXBuildFile; fileRef = A39F560725CFB65F003B17E6 /* UIViewController+MemoryLeak.m */; };
 		A39F561625CFB65F003B17E6 /* UIApplication+MemoryLeak.m in Sources */ = {isa = PBXBuildFile; fileRef = A39F560A25CFB65F003B17E6 /* UIApplication+MemoryLeak.m */; };
 		A39F561725CFB65F003B17E6 /* NSObject+MemoryLeak.m in Sources */ = {isa = PBXBuildFile; fileRef = A39F560B25CFB65F003B17E6 /* NSObject+MemoryLeak.m */; };
+		A39F561A25CFCC1C003B17E6 /* TestView.m in Sources */ = {isa = PBXBuildFile; fileRef = A39F561925CFCC1C003B17E6 /* TestView.m */; };
 		E60F18D5C8E90C6F1992D37F /* libPods-MLeaksFinderDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BB382814944B8E24F5DFD97 /* libPods-MLeaksFinderDemo.a */; };
 /* End PBXBuildFile section */
 
@@ -67,6 +68,8 @@
 		A39F560A25CFB65F003B17E6 /* UIApplication+MemoryLeak.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+MemoryLeak.m"; sourceTree = "<group>"; };
 		A39F560B25CFB65F003B17E6 /* NSObject+MemoryLeak.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+MemoryLeak.m"; sourceTree = "<group>"; };
 		A39F560C25CFB65F003B17E6 /* UIView+MemoryLeak.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MemoryLeak.h"; sourceTree = "<group>"; };
+		A39F561825CFCC1C003B17E6 /* TestView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestView.h; sourceTree = "<group>"; };
+		A39F561925CFCC1C003B17E6 /* TestView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +112,8 @@
 				A39F55E025CFB4F0003B17E6 /* ViewController.m */,
 				A39F55F225CFB5A5003B17E6 /* TestViewController.h */,
 				A39F55F325CFB5A5003B17E6 /* TestViewController.m */,
+				A39F561825CFCC1C003B17E6 /* TestView.h */,
+				A39F561925CFCC1C003B17E6 /* TestView.m */,
 				A39F55E225CFB4F0003B17E6 /* Main.storyboard */,
 				A39F55E525CFB4F3003B17E6 /* Assets.xcassets */,
 				A39F55E725CFB4F3003B17E6 /* LaunchScreen.storyboard */,
@@ -155,7 +160,6 @@
 				4438B9C2329C19E00BF9B17E /* Pods-MLeaksFinderDemo.debug.xcconfig */,
 				54B4500F179B8A3819E94A86 /* Pods-MLeaksFinderDemo.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -263,6 +267,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A39F561A25CFCC1C003B17E6 /* TestView.m in Sources */,
 				A39F55E125CFB4F0003B17E6 /* ViewController.m in Sources */,
 				A39F561325CFB65F003B17E6 /* UITabBarController+MemoryLeak.m in Sources */,
 				A39F561525CFB65F003B17E6 /* UIViewController+MemoryLeak.m in Sources */,

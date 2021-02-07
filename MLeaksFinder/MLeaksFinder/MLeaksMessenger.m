@@ -34,15 +34,16 @@ static __weak UIAlertController *alertView;
     [alertViewTemp addAction:cancelAction];
     
     if (additionalButtonTitle && objectProxy) {
+        __weak typeof(objectProxy) weakProxy = objectProxy;
         UIAlertAction *otherAction = [UIAlertAction actionWithTitle:additionalButtonTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [objectProxy clickFindRetainCyclesAction];
+            [weakProxy clickFindRetainCyclesAction];
         }];
         
         [alertViewTemp addAction:otherAction];
     }
 
     [[self visibleViewController] presentViewController:alertViewTemp animated:YES completion:nil];
-    alertView = alertViewTemp;    
+    alertView = alertViewTemp;
 }
 
 + (nullable UIViewController *)visibleViewController {
