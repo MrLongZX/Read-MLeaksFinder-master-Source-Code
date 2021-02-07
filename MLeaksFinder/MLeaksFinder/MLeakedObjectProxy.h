@@ -20,4 +20,7 @@
 // 添加泄露对象
 + (void)addLeakedObject:(id)object;
 
+// 检测循环引用
+- (void)clickFindRetainCyclesAction;
+
 @end
