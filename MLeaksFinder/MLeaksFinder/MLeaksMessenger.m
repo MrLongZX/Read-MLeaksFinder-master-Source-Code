@@ -42,9 +42,7 @@ static __weak UIAlertController *alertView;
     }
 
     [[self visibleViewController] presentViewController:alertViewTemp animated:YES completion:nil];
-    alertView = alertViewTemp;
-    
-    NSLog(@"%@: %@", title, message);
+    alertView = alertViewTemp;    
 }
 
 + (nullable UIViewController *)visibleViewController {
