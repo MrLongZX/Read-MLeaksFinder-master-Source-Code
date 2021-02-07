@@ -40,6 +40,7 @@ const void *const kLatestSenderKey = &kLatestSenderKey;
     // self转为无符号长整形
     if ([senderPtr isEqualToNumber:@((uintptr_t)self)])
         // 自身是响应发送者，返回NO
+        // 注意：如果响应发送者自身存在内存，则检测不出来
         return NO;
     
     __weak id weakSelf = self;
