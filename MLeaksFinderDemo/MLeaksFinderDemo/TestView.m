@@ -12,6 +12,8 @@ typedef void(^MyBlock)(void);
 
 @interface TestView ()
 
+@property (nonatomic, copy) NSString *string;
+
 @property (nonatomic, copy) MyBlock block;
 
 @end
@@ -22,6 +24,7 @@ typedef void(^MyBlock)(void);
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.string = @"123";
         self.backgroundColor = [UIColor orangeColor];
     }
     return self;
@@ -29,7 +32,7 @@ typedef void(^MyBlock)(void);
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     self.block = ^{
-        NSLog(@"%@",@((uintptr_t)self));
+        NSLog(@"string:%@",_string);
     };
     self.block();
 }
